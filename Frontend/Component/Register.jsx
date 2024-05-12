@@ -35,11 +35,7 @@ const RegisterPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add your registration logic here, such as sending registration data to a server
-    console.log('Username:', username);
-    console.log('Full Name:', fullName);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Avatar:', avatar);
+   
 
     axios.post('http://localhost:3000/users/register', {
       password: password,
@@ -107,11 +103,12 @@ const RegisterPage = () => {
           <div className="space-y-2">
             <label htmlFor="avatar">Avatar</label>
             <input type="file"
+              required
               accept="image/*"
               onChange={handleAvatarChange} />
           </div>
           <div>
-            <button className="w-full" type="submit" onClick={handleSubmit}>
+            <button className="w-full bg-blue-600" type="submit" onClick={handleSubmit}>
               Sign up
             </button>
           </div>

@@ -23,6 +23,10 @@ const PostSchema = new Schema({
         type:Number,
         default:0,
     },
+    Username:{
+       type:String,
+       require:true,
+    },
     owner:{
         type: mongoose.Schema.Types.ObjectId ,
         ref: "User", 

@@ -8,7 +8,7 @@ import Post from "../models/Post.model.js";
 import { User } from "../models/user.model.js";
 
 const Postimg = asyncHandler(async (req, res) => {
-    const { _id, title, description } = req.body;
+    const { _id, title, description, Username } = req.body;
     try {
         const username = await User.findById(_id);
         const owner = username._id;
@@ -18,6 +18,7 @@ const Postimg = asyncHandler(async (req, res) => {
             title,
             description,
             owner,
+            Username,
             Postimg: postString?.url || "",
         });
         return res.status(200).json(new ApiResponse(200, post, "good"));
@@ -29,7 +30,7 @@ const Postimg = asyncHandler(async (req, res) => {
 
 const postDetail = asyncHandler(async (req, res) => {
     const { post_id } = req.query;
-    const {_id} = req.body;
+    const { _id } = req.body;
     if (!post_id) {
         throw new ApiError(401, "Notable to Fetch the data");
     }
@@ -40,7 +41,7 @@ const postDetail = asyncHandler(async (req, res) => {
         const Data = {
             Postinfo: get,
             AllComment: getcomment,
-            isilike: (isilike?true:false),
+            isilike: (isilike ? true : false),
         };
 
         return res.status(200).json(new ApiResponse(200, Data, "Fetch Data Succefully"));
@@ -51,10 +52,10 @@ const postDetail = asyncHandler(async (req, res) => {
 });
 
 const Posthitlike = asyncHandler(async (req, res) => {
-    const {  post_id, _id } = req.body;
+    const { post_id, _id } = req.body;
 
     const getlike = await Like.findOne({ $and: [{ LikeBy: _id }, { PostOn: post_id }] });
-   
+
     if (!getlike) {
         await Like.create({
             LikeBy: _id,
@@ -65,7 +66,7 @@ const Posthitlike = asyncHandler(async (req, res) => {
         post.Nooflike = post.Nooflike + 1;
         await post.save({ validateBeforeSave: true });
 
-       return res.status(200).json(new ApiResponse(200,{nooflike:getlikevalue,isilike:true}, "Like Successfully"));
+        return res.status(200).json(new ApiResponse(200, { nooflike: getlikevalue, isilike: true }, "Like Successfully"));
     }
     else {
         await Like.deleteOne({ $and: [{ LikeBy: _id }, { PostOn: post_id }] });
@@ -73,7 +74,7 @@ const Posthitlike = asyncHandler(async (req, res) => {
         const getlikevalue = post.Nooflike - 1;
         post.Nooflike = post.Nooflike - 1;
         await post.save({ validateBeforeSave: true });
-        return res.status(200).json(new ApiResponse(200, {nooflike:getlikevalue,isilike:false}, "UnLike Successfully"));
+        return res.status(200).json(new ApiResponse(200, { nooflike: getlikevalue, isilike: false }, "UnLike Successfully"));
     }
 });
 
@@ -84,7 +85,7 @@ const AddComment = asyncHandler(async (req, res) => {
             Content: Comment,
             User: _id,
             Poston: post_id,
-            Username:Username
+            Username: Username
         });
         const getall_comments = await CommentSc.find({ Poston: post_id }).select("-User -Poston");
 
@@ -96,7 +97,7 @@ const AddComment = asyncHandler(async (req, res) => {
             comments: getall_comments,
             Nocomm: getcommvalue,
         }
-       return res.status(200).json(new ApiResponse(200, data, "Successfully added Comment"));
+        return res.status(200).json(new ApiResponse(200, data, "Successfully added Comment"));
     } catch {
         throw new ApiError(501, "SomeError From Server Side");
     }
@@ -112,7 +113,7 @@ const deleteComment = asyncHandler(async (req, res) => {
             post.NoofComment = post.NoofComment - 1;
             await post.save({ validateBeforeSave: true });
             const getall_comments = await CommentSc.find({ Poston: postid });
-          return res.status(200).json(new ApiResponse(200,{comments: getall_comments,Nocomm: getcommvalue}, "Successfully delelete Comment"));
+            return res.status(200).json(new ApiResponse(200, { comments: getall_comments, Nocomm: getcommvalue }, "Successfully delelete Comment"));
         } catch {
             throw new ApiError(501, "Some Error From Server Side");
         }
@@ -121,5 +122,23 @@ const deleteComment = asyncHandler(async (req, res) => {
         throw new ApiError(202, "This Is Not Your Comment You can not delete it");
     }
 });
-export { AddComment, deleteComment, postDetail, Posthitlike };
+
+const PostDelete = asyncHandler(async (req, res) => {
+    let { username, Username, postid } = req.body;
+
+    if (username == Username) {
+        try {
+            await Post.deleteOne({ _id: postid });
+            await Like.deleteMany({PostOn:postid});
+            await CommentSc.deleteMany({Poston:postid});
+            return res.status(200).json(new ApiResponse(200, {}, "DeleteSuccefully"));
+        } catch {
+            throw new ApiError(501, "Some Error From Server Side");
+        }
+    }
+    else {
+        throw new ApiError(501, "You Cannot Delete It");
+    }
+})
+export { AddComment, deleteComment, postDetail, Posthitlike ,PostDelete };
 export default Postimg;

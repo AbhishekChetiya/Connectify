@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SinglePost = () => {
+  const navigate = useNavigate();
   const { postid } = useParams();
   let [data, setData] = useState(null);
   let [comment, setComment] = useState([]);
@@ -13,6 +15,7 @@ const SinglePost = () => {
     Comment: "",
     post_id: postid,
   });
+  const [mediaType, setMediaType] = useState(null);
 
   useEffect(() => {
     const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
@@ -26,7 +29,7 @@ const SinglePost = () => {
             Authorization: `Bearer ${getLocalStorageItem?.Token}`,
           }
         });
-        console.log(response.data);
+       
         setIsilike(response.data.data.isilike)
         setData(response.data.data.Postinfo);
         if (response.data.data.AllComment) {
@@ -37,6 +40,12 @@ const SinglePost = () => {
         }
         setNoofcomment(response.data.data.Postinfo.NoofComment)
         setNooflike(response.data.data.Postinfo.Nooflike)
+        if (!response.data.data.Postimg) {
+          return; // Handle missing post image/video
+        }
+
+        const isVideo = response.data.data.Postimg.toLowerCase().endsWith('.mp4');
+        setMediaType(isVideo ? 'video' : 'image');
       } catch (error) {
         console.error(error);
       }
@@ -57,7 +66,7 @@ const SinglePost = () => {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
       const response = await axios.post('http://localhost:3000/users/Post/addcomment', comm, { headers });
-      console.log(response.data);
+     
       setNoofcomment(response.data.data.Nocomm)
       if (response.data.data.comments) {
         setComment(response.data.data.comments);
@@ -77,7 +86,7 @@ const SinglePost = () => {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
       const response = await axios.post("http://localhost:3000/users/Post/delcomment", { comm_id: comm_id, postid: postid }, { headers })
-      console.log(response.data);
+      
       setNoofcomment(response.data.data.Nocomm)
       if (response.data.data.comments) {
         setComment(response.data.data.comments);
@@ -106,27 +115,57 @@ const SinglePost = () => {
     setIsilike(response.data.data.isilike)
   }
   if (!data) {
-    return <div>Loading..</div>;
+    return <div className="flex justify-center items-center h-screen">
+      <p className="text-center">Not Found</p>
+    </div>
+  }
+  const handledelete = async () => {
+    try {
+      const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
+      const headers = {
+        Authorization: `Bearer ${getLocalStorageItem?.Token}`,
+      };
+    
+      await axios.post('http://localhost:3000/users/Post/delete', { postid: postid, username: data.Username }, { headers });
+      navigate('')
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 bg-blue-100">
       <div className="space-y-6">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
           {data.title}
         </h1>
-        <div className="aspect-video overflow-hidden rounded-lg">
-          <img
-            alt="Blog post cover image"
-            className="w-full h-full object-cover"
-            height={720}
-            src={data.Postimg}
-            style={{
-              aspectRatio: "1280/720",
-              objectFit: "cover",
-            }}
-            width={1280}
-          />
+
+        <div className="relative" >
+          {mediaType == 'image' ? <div className="h-screen flex items-center justify-center">
+            <img
+              alt="Blog post cover image"
+              className="max-w-full max-h-full object-cover"
+              src={data.Postimg}
+              style={{ minWidth: "128px" }}
+            />
+          </div> : <div>
+            <video width="840" height="360" controls>
+              <source src={data.Postimg} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>}
+          <div className="absolute top-4 right-4">
+            <button className="rounded-full" size="icon" variant="ghost" onClick={handledelete}>
+              <TrashIcon className="h-5 w-5" />
+              <span className="sr-only">Delete</span>
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-16 w-16 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 font-medium">
+            {data.Username ? data.Username.charAt(0).toUpperCase() : 'J'}
+          </div>
+          <div className="text-lg">{data.Username ? data.Username : "Jhon"}</div>
         </div>
         <div className="prose prose-lg prose-gray dark:prose-invert max-w-none">
           <p>{data.description}</p>
@@ -149,9 +188,9 @@ const SinglePost = () => {
             <div className="space-y-6" key={com._id}>
               <div className="flex flex-row items-start space-x-4">
                 <div className="flex flex-row space-x-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{com.Username}</h3>
-                </div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{com.Username}</h3>
+                  </div>
                   <p className="text-gray-700 dark:text-gray-300">{com.Content}</p>
                   <button
                     onClick={() => deletecomment(com._id)}
@@ -241,4 +280,24 @@ function XIcon(props) {
   )
 }
 
+function TrashIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 6h18" />
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+    </svg>
+  )
+}
 export default SinglePost;

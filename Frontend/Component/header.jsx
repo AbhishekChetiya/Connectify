@@ -2,17 +2,55 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
+import photo from '/abhi_photo.jpeg'
+
+
+
+// Custom DropdownMenuTrigger component
+const DropdownMenuTrigger = ({ children }) => {
+    return <div className="relative">{children}</div>;
+};
+
+// Custom DropdownMenuItem component
+const DropdownMenuItem = ({ children }) => {
+    return <div>{children}</div>;
+};
+const DropdownMenuContent = ({ children }) => {
+    return (
+      <div className="absolute z-10 mt-2 w-48 origin-top bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 left-1/2 transform -translate-x-1/2">
+        {children}
+      </div>
+    );
+  };
+
+// Custom DropdownMenuContent component
+
+
+// Custom DropdownMenu component
+const DropdownMenu = ({ children }) => {
+    return <div className="py-1">{children}</div>;
+};
+
 
 const ButtonPage = () => {
     const [searchValue, setSearchValue] = useState('');
     const [islogin, setIslogin] = useState(false);
     const [getsearchuser, setGetSearchUser] = useState([]);
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
+
+
+
     const search = async () => {
         try {
             const response = await axios.get('http://localhost:3000/users/FindUser', {
                 params: { search: searchValue }
             });
-            
+
             setGetSearchUser(response.data.data);
         } catch (error) {
             console.error('Error searching for users:', error);
@@ -40,7 +78,7 @@ const ButtonPage = () => {
     const searchclick = (id) => {
         setGetSearchUser([]);
         navigate(`/Profile/${id}`);
-    
+
     }
     useEffect(() => {
         const userValue = localStorage.getItem("user");
@@ -51,68 +89,111 @@ const ButtonPage = () => {
     };
     return (
         <div>
-            <header className="flex items-center justify-between bg-white px-12 py-3 shadow-sm dark:bg-gray-950">
-                <nav className="flex items-center space-x-16">
-                    <div className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-                        Pata_Nahi
-                    </div>
-                    <div className="hidden space-x-16 md:flex">
-                        {islogin ? <> <Link
-                            to="/Profile"
-                            className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                        >
+            <header className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 lg:px-8 lg:py-5">
+                <div className="flex items-center gap-4">
+                    <img src={photo} alt='photo' className='rounded-full object-contain h-10' />
+                    <nav className="hidden space-x-4 md:flex">
+                        {islogin ? <> <Link className="text-sm font-medium hover:underline" to="">
                             Profile
                         </Link>
-                            <Link
-                                to="/Post"
-                                className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                            >
-                                Post
+                            <Link className="text-sm font-medium hover:underline" to="/Allpost">
+                                AllPost
                             </Link>
-                            <Link
-                                to="/login"
-                                className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                            >
-                                Logout
+                            <Link className="text-sm font-medium hover:underline" to="/Post">
+                               Post
                             </Link>
-                        </>
-                            : <><Link
-                                to="/login"
-                                className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                            >
-                                Login
+                            <Link className="text-sm font-medium hover:underline" to="/ChangePassword">
+                              ChangePassword
                             </Link>
-                                <Link
-                                    to="/register"
-                                    className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                                >
-                                    Register
-                                </Link></>
-                        }
-
-                    </div>
-                </nav>
-                <div className="flex items-center space-x-4">
-                    <form className="relative">
-
-                        <input
-                            className="h-9 w-[200px] rounded-md bg-gray-100 pl-10 text-sm focus:bg-white focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:focus:bg-gray-700"
-                            placeholder="Search..."
-                            type="text"
-                            onChange={handlevalue}
-                        />
-                        <div onClick={handleSearchChange}> <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" /> </div>
-                    </form>
+                            <Link className="text-sm font-medium hover:underline" to="/UpdateAvatar">
+                            UpdateAvatar
+                            </Link>
+                            <Link className="text-sm font-medium hover:underline" to="/login">
+                                logout
+                            </Link>
+                            </> : <> <Link className="text-sm font-medium hover:underline" to="/register">
+                                Register
+                            </Link>
+                            <Link className="text-sm font-medium hover:underline" href="/login">
+                                login
+                            </Link></>}
+                    </nav>
                 </div>
+
+                <div className="md:hidden">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button size="icon" variant="outline" onClick={toggleMenu}>
+                                <MenuIcon className="h-6 w-6" />
+                                <span className="sr-only">Toggle navigation menu</span>
+                            </button>
+                        </DropdownMenuTrigger>
+                        {isOpen ? (
+                            <DropdownMenuContent align="middle" className="w-48">
+                                {islogin?<> <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="">
+                                        Profile
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link   onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Allpost">
+                                        AllPost
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Post">
+                                        Post
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/ChangePassword">
+                                    ChangePassword
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/UpdateAvatar">
+                                    UpdateAvatar
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login"
+                                    >
+                                        Logout
+                                    </Link>
+                                </DropdownMenuItem> </>: <>
+                                <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login">
+                                        Login
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/register"
+                                    >
+                                        Register
+                                    </Link>
+                                </DropdownMenuItem>
+                                </>}
+                            </DropdownMenuContent>) : ""}
+                    </DropdownMenu>
+                </div>
+                {islogin ? <div className="relative flex flex-shrink w-18 md:mx-2 lg:mx-3">
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2" onClick={handleSearchChange}>
+                        <SearchIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                    </div>
+                    <input
+                        className="w-full rounded-md border border-gray-300 bg-white px-10 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="Search..."
+                        type="search"
+                        onChange={handlevalue}
+                    />
+                </div> : ""}
             </header>
 
             {getsearchuser.map((user) => (
                 <div className="mt-4 max-h-[300px] overflow-y-auto" key={user._id} onClick={() => searchclick(user._id)}>
                     <div className="grid gap-4">
-                        <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 space-x-10 mx-10">
-                                <img alt="UserImg" src={user.Avatar} />
-                            </div>
+                        <div className="flex items-center gap-4 mx-10">
+                            <img alt="UserImg" src={user.Avatar} className='rounded-full object-contain h-12' />
                             <div className="flex-1">
                                 <h4 className="font-medium">{user.username}</h4>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">{user.FullName}</p>
@@ -134,6 +215,33 @@ const ButtonPage = () => {
     );
 };
 
+export default ButtonPage;
+
+
+
+
+function MenuIcon(props) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+    )
+}
+
+
 function SearchIcon(props) {
     return (
         <svg
@@ -153,6 +261,3 @@ function SearchIcon(props) {
         </svg>
     )
 }
-export default ButtonPage;
-
-

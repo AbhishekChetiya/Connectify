@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PostManager from './PostManager';
-
+import { useNavigate } from 'react-router-dom';
 const ProfilePage = () => {
   const [data, setData] = useState(null);
-  const [ismyaccount , setIsmyaccount] = useState(false);
-  const [click, setClick] = useState(-1);
-  const [noofollower,setNofFollower] = useState(0);
-  const [noofollowing,setNofFollowing] = useState(0);
-
-
+  
+ const navigate = useNavigate()
   useEffect(() => {
     const fetchData = async () => {
+     
       try {
         const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
+        if(!getLocalStorageItem){
+             navigate('/login')
+        }
         const response = await axios.get('http://localhost:3000/users/Profile', {
           headers: {
             Authorization: `Bearer ${getLocalStorageItem?.Token}`,
@@ -31,9 +31,7 @@ const ProfilePage = () => {
     return <div>Loading...</div>; // Add a loading indicator while fetching data
   }
 
-  const handelfollow = () =>{
-
-  }
+  
   //   console.log(data);
   // countFollower
   // countFollowing

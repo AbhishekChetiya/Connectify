@@ -33,9 +33,9 @@ const PostPage = () => {
         }).catch((err) => {
             console.log(err);
         })
-        // setTitle('');
-        // setDescription('');
-        // setPostimg(null);
+        setTitle('');
+        setDescription('');
+        setPostimg(null);
     };
  
     return (

@@ -73,43 +73,47 @@ const Makesearchwrequest = asyncHandler(async(req,res) =>{
 })
 
 const CurrentUserPassword = asyncHandler(async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
 
-  const user = await User.findById(req.body?._id);
-  const check = await user.isPasswordCorrect(oldPassword);
-  if (!check) {
-    throw new ApiError(405, "Not Correct Password");
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.body?._id);
+    const check = await user.isPasswordCorrect(oldPassword);
+    
+    if (!check) {
+      throw new ApiError(405, "Not Correct Password");
+    }
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: true });
+
+    return res.status(200).json(new ApiResponse(200, {}, "Successfully changed password"));
+  } catch (error) {
+    // Handle errors
+    return res.status(error.statusCode || 500).json({ error: error.message });
   }
-
-  user.password = newPassword;
-  await user.save({ validateBeforeSave: true });
-
-  return res.status(200).json(new ApiResponse(200, {}, "Successfull Search"));
 });
+
 
 const CurrentUser = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, req.user, "Get Current User"));
 });
 
 const UpdateAvatar = asyncHandler(async (req, res) => {
-  const avatarFile = req.file;
-  if (!avatarFile) {
+  const avatarLocalPath = req.files?.Avatar[0]?.path;
+  if (!avatarLocalPath) {
     throw new ApiError(405, "Avatar Missing");
   }
 
-  const avatar = await FileUpload(avatarFile);
+  const avatar = await FileUpload(avatarLocalPath);
 
   if (!avatar.url) {
     throw new ApiError(405, "Avatar Uploading Api Error");
   }
+  const user = await User.findById(req.body?._id);
+  user.Avatar = avatar.url;
+  await user.save({ validateBeforeSave: true });
 
-  const user = await User.findByIdAndUpdate(
-    req.user?._id,
-    { $set: { Avatar: avatar.url } },
-    { new: true }
-  ).select("-password");
-
-  return res.status(200).json(new ApiResponse(200, user, "Avatar Change Successfully"));
+  return res.status(200).json(new ApiResponse(200, {}, "Avatar Change Successfully"));
 });
 
 const getProfileofUser = asyncHandler(async (req, res) => {
@@ -191,6 +195,37 @@ const Followrequest = asyncHandler(async(req,res) => {
    }
 });
 
-export { Makesearchwrequest ,getProfileofAlt, Followrequest,
+const GetAllPost = asyncHandler(async(req, res) => {
+  try {
+      const { skip = 0, limit = 10 } = req.query;
+
+      // Convert skip and limit to numbers
+      const skipCount = parseInt(skip);
+      const limitCount = parseInt(limit);
+
+      // Query the database to skip some posts and limit the number of posts returned
+      const limitedPosts = await Post.find().skip(skipCount).limit(limitCount);
+
+      // Query the database to get the total count of all posts
+      const totalCount = await Post.countDocuments();
+
+      return res.status(200).json({
+          success: true,
+          data: {
+              posts: limitedPosts,
+              totalCount: totalCount
+          },
+          message: "Get AllPost Successfully"
+      });
+  } catch (error) {
+      return res.status(500).json({
+          success: false,
+          error: "Internal Server Error"
+      });
+  }
+});
+
+
+export { Makesearchwrequest ,getProfileofAlt, Followrequest,GetAllPost,
   registerUser, loginuser, CurrentUserPassword, CurrentUser, UpdateAvatar, getProfileofUser
 };

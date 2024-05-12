@@ -22,8 +22,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-     console.log(username)
-    // Reset the form fields after submission
+    
   const get =  await  axios('http://localhost:3000/users/login', {
       method: "post",
       data: {
@@ -32,7 +31,7 @@ const LoginPage = () => {
       },
     })
     localStorage.setItem("user", JSON.stringify(get.data.data));
-        navigation("/Profile");
+        navigation("/Allpost");
         window.location.reload();
     setUsername('');
     setPassword('');
