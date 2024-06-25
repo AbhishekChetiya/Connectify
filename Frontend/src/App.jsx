@@ -11,6 +11,7 @@ import ProfilePage1 from '../Component/Profile1.jsx';
 import GetAllPost from '../Component/GetallPost.jsx';
 import ChangePasswordCard from '../Component/ChangePassword.jsx';
 import UpdateAvatar from '../Component/ChangeAvatar.jsx';
+import ChatPage from '../Component/chatpage.jsx';;
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -55,6 +56,10 @@ const App = () => {
         {
           path: "Post",
           element: <PostPage />,
+        },
+        {
+          path: "chatpage",
+          element: <ChatPage/>,
         },
       ],
     },

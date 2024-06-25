@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import FormData from 'form-data'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const UpdateAvatar = () => {
   const [postimg, setPostimg] = useState(null);
   const handleAvatarChange = (event) => {
@@ -10,20 +11,18 @@ const UpdateAvatar = () => {
     event.preventDefault();
 
     const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
-    console.log(postimg);
     try {
-    const response = await axios.post('http://localhost:3000/users/UpdateAvatar', { Avatar:postimg , hello :'kj'}, {
+    await axios.post('http://localhost:3000/users/UpdateAvatar', { Avatar:postimg , hello :'kj'}, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${getLocalStorageItem?.Token}`,
         }
       });
-      console.log(response);
+      setPostimg(null);
+      toast.success("done"); 
     } catch (error) {
-      console.log("Error:", error);
+      toast.error("error");
     }
-
-    console.log("Done");
   };
 
   return (
@@ -41,6 +40,7 @@ const UpdateAvatar = () => {
           Upload
         </button>
       </form>
+      <ToastContainer />
     </div>
   )
 

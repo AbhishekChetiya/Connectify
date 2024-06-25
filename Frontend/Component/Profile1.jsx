@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PostManager from './PostManager';
 import { useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const ProfilePage1 = () => {
@@ -25,7 +27,7 @@ const ProfilePage1 = () => {
                             Authorization: `Bearer ${getLocalStorageItem?.Token}`,
                         }
                     });
-                    setData(response.data.data);
+                setData(response.data.data);
                 setIsmyaccount(response.data.data.isyouraccount);
                 setNofFollower(response.data.data.countFollower);
                 setNofFollowing(response.data.data.countFollowing);
@@ -43,17 +45,25 @@ const ProfilePage1 = () => {
 
     const handelfollow = async () => {
         const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
-        const response = await axios.post("http://localhost:3000/users/Follow/request", {
-            user_id: _id,
-        },
-            {
-                headers: {
-                    Authorization: `Bearer ${getLocalStorageItem?.Token}`,
-                }
-            });
-       setNofFollower(response.data.data.followers);
-       setNofFollowing(response.data.data.following);
-       setIsFollowing(response.data.data.isfollowing);
+        try {
+            const response = await axios.post("http://localhost:3000/users/Follow/request", {
+                user_id: _id,
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${getLocalStorageItem?.Token}`,
+                    }
+                });
+            setNofFollower(response.data.data.followers);
+            setNofFollowing(response.data.data.following);
+            setIsFollowing(response.data.data.isfollowing);
+            console.log(isfollowing);
+            let message = isfollowing?"UnFollow":"Follow";
+            toast.success(`Succefully ${message}`);
+        }
+        catch (error) {
+            toast.error("Something Went Wrong");
+        }
     }
     return (
         <>
@@ -98,6 +108,7 @@ const ProfilePage1 = () => {
                                 })
                             }
                         </div>
+                        <ToastContainer />
                     </div>
                 </div>
             </div>

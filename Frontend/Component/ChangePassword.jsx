@@ -90,27 +90,27 @@ const ChangePasswordCard = () => {
 
 
     return (
-        <Card className="w-full max-w-sm mx-auto rounded-lg my-24">
+        <form className="w-full max-w-sm mx-auto rounded-lg my-24">
             <CardHeader>
                 <CardTitle>Change Password</CardTitle>
                 <CardDescription>Enter your new password below to update your account.</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-2">
-                    <Label htmlFor="password">Old Password</Label>
-                    <input onChange={(e) => { setOldPassword(e.target.value) }} id="password" placeholder="Enter new password" required type="password" className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <Label htmlFor="oldpassword">Old Password</Label>
+                    <input onChange={(e) => { setOldPassword(e.target.value) }} id="oldpassword" placeholder="Enter new password" required type="old-password" className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                 </div>
             </CardContent>
             <CardContent>
                 <div className="space-y-2">
-                    <Label htmlFor="password">New Password</Label>
-                    <input onChange={(e) => { setPassword(e.target.value) }} id="password" placeholder="Enter new password" required type="password" className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <Label htmlFor="new-password">New Password</Label>
+                    <input onChange={(e) => { setPassword(e.target.value) }} id="new-password" placeholder="Enter new password" required type="new-password" className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                 </div>
             </CardContent>
             <CardFooter>
                 <button onClick={handlesummit} className="py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 w-full" >Update Password</button>
             </CardFooter>
-        </Card>
+        </form>
     );
 };
 

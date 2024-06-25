@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PostPage = () => {
     const [title, setTitle] = useState('');
@@ -17,27 +19,29 @@ const PostPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(postimg)
         const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
-        await axios.post('http://localhost:3000/users/Post/Upload', {
-            description: description,
-            title: title,
-            Postimg: postimg,
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${getLocalStorageItem?.Token}`,
-            }
-        }).then((res) => {
-            console.log(res)
-        }).catch((err) => {
-            console.log(err);
-        })
+        try {
+            await axios.post('http://localhost:3000/users/Post/Upload', {
+                description: description,
+                title: title,
+                Postimg: postimg,
+            }, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${getLocalStorageItem?.Token}`,
+                }
+            });
+
+            toast.success("Succefully Post Added");
+        }
+        catch (err) {
+            toast.error("any error ocurred");
+        };
         setTitle('');
         setDescription('');
         setPostimg(null);
     };
- 
+
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-gray-900">
             <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
@@ -49,7 +53,7 @@ const PostPage = () => {
                         </label>
                         <div className="flex justify-center items-center w-full h-32 bg-gray-200 dark:bg-gray-700 rounded-lg">
                             <input className="hidden" type="file"
-                                required accept="image/*,video/*" id="image" onChange={handleAvatarChange}/>
+                                required accept="image/*,video/*" id="image" onChange={handleAvatarChange} />
                             <label
                                 className="cursor-pointer text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                                 htmlFor="image"
@@ -109,10 +113,11 @@ const PostPage = () => {
                         </button>
                     </div>
                 </form>
+                <ToastContainer />
             </div>
         </div>
     )
-    
+
 }
 
 export default PostPage;

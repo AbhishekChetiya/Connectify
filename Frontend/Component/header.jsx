@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import photo from '/abhi_photo.jpeg'
-
+import { useNotification } from './Notification';
 
 
 // Custom DropdownMenuTrigger component
@@ -17,11 +17,11 @@ const DropdownMenuItem = ({ children }) => {
 };
 const DropdownMenuContent = ({ children }) => {
     return (
-      <div className="absolute z-10 mt-2 w-48 origin-top bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 left-1/2 transform -translate-x-1/2">
-        {children}
-      </div>
+        <div className="absolute z-10 mt-2 w-48 origin-top bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 left-1/2 transform -translate-x-1/2">
+            {children}
+        </div>
     );
-  };
+};
 
 // Custom DropdownMenuContent component
 
@@ -33,7 +33,7 @@ const DropdownMenu = ({ children }) => {
 
 
 const ButtonPage = () => {
-    const [searchValue, setSearchValue] = useState('');
+    const [searchValue, setSearchValue] = useState("");
     const [islogin, setIslogin] = useState(false);
     const [getsearchuser, setGetSearchUser] = useState([]);
 
@@ -42,9 +42,7 @@ const ButtonPage = () => {
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
-
-
-
+    const { notification } = useNotification();
     const search = async () => {
         try {
             const response = await axios.get('http://localhost:3000/users/FindUser', {
@@ -100,20 +98,26 @@ const ButtonPage = () => {
                                 AllPost
                             </Link>
                             <Link className="text-sm font-medium hover:underline" to="/Post">
-                               Post
+                                Post
                             </Link>
                             <Link className="text-sm font-medium hover:underline" to="/ChangePassword">
-                              ChangePassword
+                                ChangePassword
                             </Link>
                             <Link className="text-sm font-medium hover:underline" to="/UpdateAvatar">
-                            UpdateAvatar
+                                UpdateAvatar
                             </Link>
                             <Link className="text-sm font-medium hover:underline" to="/login">
                                 logout
                             </Link>
-                            </> : <> <Link className="text-sm font-medium hover:underline" to="/register">
-                                Register
+                            <Link className="relative inline-block" to="/chatpage">
+                                <MessageCircleIcon className="h-6 w-6" />
+                              {notification!=0 &&  <div className="absolute top-0 right-0 -mt-1 -mr-1 h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white flex items-center justify-center">
+                                  {notification}
+                                </div>}
                             </Link>
+                        </> : <> <Link className="text-sm font-medium hover:underline" to="/register">
+                            Register
+                        </Link>
                             <Link className="text-sm font-medium hover:underline" href="/login">
                                 login
                             </Link></>}
@@ -130,51 +134,62 @@ const ButtonPage = () => {
                         </DropdownMenuTrigger>
                         {isOpen ? (
                             <DropdownMenuContent align="middle" className="w-48">
-                                {islogin?<> <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="">
+                                {islogin ? <> <DropdownMenuItem>
+                                    <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="">
                                         Profile
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link   onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Allpost">
-                                        AllPost
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Post">
-                                        Post
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/ChangePassword">
-                                    ChangePassword
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/UpdateAvatar">
-                                    UpdateAvatar
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login"
-                                    >
-                                        Logout
-                                    </Link>
-                                </DropdownMenuItem> </>: <>
-                                <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login">
-                                        Login
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link  onClick={toggleMenu}  className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/register"
-                                    >
-                                        Register
-                                    </Link>
-                                </DropdownMenuItem>
-                                </>}
+                                    <DropdownMenuItem>
+                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Allpost">
+                                            AllPost
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Post">
+                                            Post
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/ChangePassword">
+                                            ChangePassword
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/UpdateAvatar">
+                                            UpdateAvatar
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login"
+                                        >
+                                            Logout
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link className="relative inline-block" onClick={toggleMenu} to="/chatpage">
+                                            <MessageCircleIcon className="h-6 w-6" />
+                                 {notification!=0 &&  <div className="absolute top-0 right-0 -mt-1 -mr-1 h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white flex items-center justify-center">
+                                  {notification}
+                                </div>}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </>
+                                    : <>
+                                        <DropdownMenuItem>
+                                            <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login">
+                                                Login
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/register"
+                                            >
+                                                Register
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </>}
                             </DropdownMenuContent>) : ""}
                     </DropdownMenu>
+
                 </div>
                 {islogin ? <div className="relative flex flex-shrink w-18 md:mx-2 lg:mx-3">
                     <div className="absolute right-3 top-1/2 -translate-y-1/2" onClick={handleSearchChange}>
@@ -184,9 +199,11 @@ const ButtonPage = () => {
                         className="w-full rounded-md border border-gray-300 bg-white px-10 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         placeholder="Search..."
                         type="search"
+                        value={searchValue || ''}
                         onChange={handlevalue}
                     />
                 </div> : ""}
+
             </header>
 
             {getsearchuser.map((user) => (
@@ -258,6 +275,25 @@ function SearchIcon(props) {
         >
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
+        </svg>
+    )
+}
+
+function MessageCircleIcon(props) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
         </svg>
     )
 }

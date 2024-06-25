@@ -14,10 +14,7 @@ const connection = async  ()=>{
          app.on("error",(error)=>{
             console.log("ERROR: ", error)
             throw error;
-         })
-         app.listen( (process.env.PORT || 3000) , () => {
-            console.log(`Server is running on port ${process.env.PORT}`);
-        });
+         })      
     }
     catch(error){
         console.log("App Listen At Port", `${process.env.PORT}`)
@@ -27,4 +24,38 @@ const connection = async  ()=>{
 };
 connection();
 
+import http, { ServerResponse } from 'http';
+import { Server } from 'socket.io'
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods:['GET','POST']
+  },
+  pingTimeout: 60000
+});
+
+io.on('connection', (socket) => {
+  socket.on('setup', (userdata) => {
+    socket.join(userdata);
+    socket.emit("connected");
+  });
+
+  socket.on("join chat" , (room)=>{
+    socket.join(room);
+    // console.log("user the join the room" , room);
+  })
+
+  socket.on('new message' , (newMessage)=>{
+    var chat = newMessage.chat;
+    if(!chat.users)return ;
+    chat.users.forEach(user => {
+        socket.in(user).emit("message recieved" , newMessage)
+    });
+  })
+});
+server.listen( (process.env.PORT || 3000) , () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+});  
 export {app}

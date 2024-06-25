@@ -104,7 +104,10 @@ const AddComment = asyncHandler(async (req, res) => {
 });
 const deleteComment = asyncHandler(async (req, res) => {
     const { Username, comm_id, _id, postid } = req.body;
-    const check = await CommentSc.find({ $and: [{ User: _id }, { Poston: postid }, { _id: comm_id }] });
+    const check = await CommentSc.find({ _id: comm_id});
+    if(Username !== check[0].Username){
+        throw new ApiError(405, "You Can delete this");
+    }
     if (check) {
         try {
             await CommentSc.deleteOne({ _id: comm_id });

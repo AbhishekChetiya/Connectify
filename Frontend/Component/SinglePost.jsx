@@ -2,9 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SinglePost = () => {
-  const navigate = useNavigate();
+  const navigation = useNavigate();
   const { postid } = useParams();
   let [data, setData] = useState(null);
   let [comment, setComment] = useState([]);
@@ -29,7 +31,7 @@ const SinglePost = () => {
             Authorization: `Bearer ${getLocalStorageItem?.Token}`,
           }
         });
-       
+
         setIsilike(response.data.data.isilike)
         setData(response.data.data.Postinfo);
         if (response.data.data.AllComment) {
@@ -38,14 +40,16 @@ const SinglePost = () => {
         else {
           setComment([]);
         }
+        console.log(response.data.data)
         setNoofcomment(response.data.data.Postinfo.NoofComment)
         setNooflike(response.data.data.Postinfo.Nooflike)
-        if (!response.data.data.Postimg) {
+        if (!response.data.data.Postinfo.Postimg) {
           return; // Handle missing post image/video
         }
 
-        const isVideo = response.data.data.Postimg.toLowerCase().endsWith('.mp4');
+        const isVideo = response.data.data.Postinfo.Postimg.toLowerCase().endsWith('.mp4');
         setMediaType(isVideo ? 'video' : 'image');
+
       } catch (error) {
         console.error(error);
       }
@@ -66,7 +70,7 @@ const SinglePost = () => {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
       const response = await axios.post('http://localhost:3000/users/Post/addcomment', comm, { headers });
-     
+
       setNoofcomment(response.data.data.Nocomm)
       if (response.data.data.comments) {
         setComment(response.data.data.comments);
@@ -75,8 +79,9 @@ const SinglePost = () => {
         setComment([]);
       }
       setComm({ ...comm, Comment: '' });
+      toast.success("Done Sucessfully");
     } catch (error) {
-      console.error(error);
+      toast.error("Some Error occur while adding the comment");
     }
   };
   const deletecomment = async (comm_id) => {
@@ -86,7 +91,7 @@ const SinglePost = () => {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
       const response = await axios.post("http://localhost:3000/users/Post/delcomment", { comm_id: comm_id, postid: postid }, { headers })
-      
+
       setNoofcomment(response.data.data.Nocomm)
       if (response.data.data.comments) {
         setComment(response.data.data.comments);
@@ -94,9 +99,9 @@ const SinglePost = () => {
       else {
         setComment([]);
       }
-
+      toast.success("Done Sucessfully");
     } catch (error) {
-      console.error(error);
+      toast.error("something went wrong or you can delete it");
     }
   };
 
@@ -108,11 +113,17 @@ const SinglePost = () => {
     const headers = {
       Authorization: `Bearer ${getLocalStorageItem?.Token}`,
     };
-    const response = await axios.post("http://localhost:3000/users/Post/hitlike", {
-      post_id: postid
-    }, { headers });
-    setNooflike(response.data.data.nooflike);
-    setIsilike(response.data.data.isilike)
+    try {
+      const response = await axios.post("http://localhost:3000/users/Post/hitlike", {
+        post_id: postid
+      }, { headers });
+      setNooflike(response.data.data.nooflike);
+      setIsilike(response.data.data.isilike);
+      toast.success("Succesfully hit like button")
+    }
+    catch (err) {
+      toast.error("Some things Went Wrong")
+    }
   }
   if (!data) {
     return <div className="flex justify-center items-center h-screen">
@@ -125,11 +136,12 @@ const SinglePost = () => {
       const headers = {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
-    
+
       await axios.post('http://localhost:3000/users/Post/delete', { postid: postid, username: data.Username }, { headers });
-      navigate('')
+      navigation("/Allpost");
+      window.location.reload();
     } catch (error) {
-      console.error(error);
+      toast.error("this post not belong to you")
     }
   }
 
@@ -140,22 +152,22 @@ const SinglePost = () => {
           {data.title}
         </h1>
 
-        <div className="relative" >
-          {mediaType == 'image' ? <div className="h-screen flex items-center justify-center">
+        <div className="relative h-screen flex items-center justify-center">
+          {mediaType === 'image' ? (
             <img
               alt="Blog post cover image"
               className="max-w-full max-h-full object-cover"
               src={data.Postimg}
               style={{ minWidth: "128px" }}
             />
-          </div> : <div>
+          ) : (
             <video width="840" height="360" controls>
               <source src={data.Postimg} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-          </div>}
+          )}
           <div className="absolute top-4 right-4">
-            <button className="rounded-full" size="icon" variant="ghost" onClick={handledelete}>
+            <button className="rounded-full p-2 bg-gray-700 hover:bg-gray-800 text-white" onClick={handledelete}>
               <TrashIcon className="h-5 w-5" />
               <span className="sr-only">Delete</span>
             </button>
@@ -218,6 +230,7 @@ const SinglePost = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
   function HeartIcon(props) {
