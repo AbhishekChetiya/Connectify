@@ -30,8 +30,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
+<<<<<<< HEAD
     origin: '*',
     methods:['GET','POST' , 'PUT' , 'DELETE']
+=======
+    origin: '',
+    methods:['GET','POST']
+>>>>>>> 69da40dd6e0aeeec9787659d19ed684b21b5ffc2
   },
   pingTimeout: 60000
 });
