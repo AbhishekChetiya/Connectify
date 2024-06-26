@@ -301,7 +301,7 @@ const ChatPage = () => {
               )}
           </div>
           <div ref={containerRef} className="flex-1 p-6 overflow-y-auto">
-             {allmessage.map((message)=> 
+             {allmessage.map((message , index)=> 
              <div key={message._id} className={`flex items-center mb-4 ${userid == message.sender._id ? 'justify-end' : 'justify-start'}`} index = {index}>
                 <img src={message.sender.Avatar} alt="" className="w-8 h-8 rounded-full object-cover mr-2"/>
                 <div
