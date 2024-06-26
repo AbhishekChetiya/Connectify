@@ -54,6 +54,10 @@ io.on('connection', (socket) => {
         socket.in(user).emit("message recieved" , newMessage)
     });
   })
+
+  socket.off('setup',()=>{
+     socket.leave(userdata)
+  })
 });
 server.listen( (process.env.PORT || 3000) , () => {
     console.log(`Server is running on port ${process.env.PORT}`);
