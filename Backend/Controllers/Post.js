@@ -23,8 +23,8 @@ const Postimg = asyncHandler(async (req, res) => {
         });
         return res.status(200).json(new ApiResponse(200, post, "good"));
     }
-    catch {
-        throw new ApiError(501, "Some Error From Server Side");
+    catch (error) {
+        throw new ApiError(500, error);
     }
 });
 

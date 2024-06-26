@@ -63,8 +63,8 @@ const ChangePasswordCard = () => {
     let [password, setPassword] = useState('');
     let [oldpassword, setOldPassword] = useState('');
 
-    const handlesummit = async () => {
-        console.log(password, oldpassword);
+    const handlesummit = async (e) => {
+        e.preventDefault()
         if (password === '') {
             // Handle the case where the password is not empty
         } else {

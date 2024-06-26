@@ -1,4 +1,4 @@
-import { useEffect, useState , useRef } from "react"
+import { useEffect, useState, useRef } from "react"
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,41 +11,41 @@ import { useNotification } from "./Notification";
 import io from 'socket.io-client'
 
 const URL = "http://localhost:3000";
-var socket , selectedChatCompare;
+var socket, selectedChatCompare;
 const ChatPage = () => {
   const containerRef = useRef(null);
-  const [allmessage , setallmessage] = useState([]);
+  const [allmessage, setallmessage] = useState([]);
   const [chats, setChats] = useState(null);
   const [chatsuser, setChatsuser] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [getsearchuser, setGetSearchUser] = useState([]);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [newchat,setnewchat] = useState(null);
+  const [newchat, setnewchat] = useState(null);
   const [userid, setUserid] = useState(null);
-  const [selectedchat , setSelectedchat] = useState(null);
-  const [socketconnected , setsocketconneted] = useState(false);
-  const{ notificationInc, notificationDec } = useNotification();
-  const createMessage = async(_id)=>{
+  const [selectedchat, setSelectedchat] = useState(null);
+  const [socketconnected, setsocketconneted] = useState(false);
+  const { notificationInc, notificationDec } = useNotification();
+  const createMessage = async (_id) => {
     const userValue = localStorage.getItem("user");
-    if(newchat!=null){
-    const user = JSON.parse(userValue);
-    try{
-     const get =  await axios.post('https://backend-intsagram.onrender.com/users/newmessage',{
-        chatid:_id ,
-        content:newchat,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.Token}`,
-        }
-      });
-      setallmessage([...allmessage , get.data.data]);
-      socket.emit("new message", get.data.data);
+    if (newchat != null) {
+      const user = JSON.parse(userValue);
+      try {
+        const get = await axios.post('https://backend-intsagram.onrender.com/users/newmessage', {
+          chatid: _id,
+          content: newchat,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user?.Token}`,
+          }
+        });
+        setallmessage([...allmessage, get.data.data]);
+        socket.emit("new message", get.data.data);
+      }
+      catch (err) {
+        toast.error("Somethings Went Wrong");
+      }
     }
-    catch(err){
-      toast.error("Somethings Went Wrong");
-    }
-   }
   }
   useEffect(() => {
     const userValue = localStorage.getItem("user");
@@ -70,11 +70,11 @@ const ChatPage = () => {
     notificationDec();
     fetchChatData();
     socket = io(URL);
-    socket.emit("setup",user.user);
-    socket.on("connection",() => setsocketconneted(true));
+    socket.emit("setup", user.user);
+    socket.on("connection", () => setsocketconneted(true));
   }, []);
 
-  const acesschat = async ({ _id, username }) => { 
+  const acesschat = async ({ _id, username }) => {
     const userValue = localStorage.getItem("user");
     if (userValue) {
       const user = JSON.parse(userValue);
@@ -103,21 +103,21 @@ const ChatPage = () => {
         setnewchat(null);
         setChats(response.data.data);
         setSelectedchat(response.data.data._id);
-        socket.emit("join chat",response.data.data._id);
+        socket.emit("join chat", response.data.data._id);
       } catch (err) {
         toast.error("An error occurred");
       }
     }
 
   }
-  useEffect(()=>{
+  useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
     selectedChatCompare = selectedchat
-  },[allmessage]);
+  }, [allmessage]);
 
-  
+
 
   const search = async () => {
     try {
@@ -156,7 +156,7 @@ const ChatPage = () => {
   // Make sure to declare setSearchValue outside the function to avoid re-initializing it on each call
 
 
-  
+
   const handlevalue = (event) => {
     setSearchValue(event.target.value);
   };
@@ -164,13 +164,13 @@ const ChatPage = () => {
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
   };
-  const deletegroup = async ({_id})=>{
-    setnewchat(null) 
+  const deletegroup = async ({ _id }) => {
+    setnewchat(null)
     const userValue = localStorage.getItem("user");
     const user = JSON.parse(userValue);
-    try{
-      await axios.post('https://backend-intsagram.onrender.com/users/deletegroup',{
-        chatid:_id ,
+    try {
+      await axios.post('https://backend-intsagram.onrender.com/users/deletegroup', {
+        chatid: _id,
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -179,7 +179,7 @@ const ChatPage = () => {
       });
       toast.success("Successfully Delete The Group");
     }
-    catch(err){
+    catch (err) {
       toast.error("Somethings Went Wrong");
     }
   }
@@ -189,19 +189,19 @@ const ChatPage = () => {
 
   const [showGroupfun, setShowGroupfun] = useState(false);
 
-  const changegroup = ()=>{
+  const changegroup = () => {
     setShowGroupfun(!showGroupfun);
   }
-  
-  useEffect(()=>{
-    socket.on("message recieved", (newMessage)=>{
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessage) => {
       // console.log(selectedChatCompare , selectedchat , newMessage);
-      if(selectedchat !== newMessage.chat._id){
-      //   // give notification
+      if (selectedchat !== newMessage.chat._id) {
+        //   // give notification
         notificationInc();
       }
-      else{
-        setallmessage([...allmessage , newMessage]);
+      else {
+        setallmessage([...allmessage, newMessage]);
       }
     })
   });
@@ -232,49 +232,49 @@ const ChatPage = () => {
               {isSidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}
             </button>
             <div className="h-[calc(100%-150px)] overflow-y-auto">
-                {getsearchuser.map((search, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between px-6 py-3 bg-white rounded-md my-1"
-                  >
-                    <div className="flex items-center space-x-3" onClick={() => acesschat({ _id: null, username: search.username })}>
-                      <img
-                        src={search.Avatar}
-                        className="w-12 h-12 rounded-full object-cover"
-                        alt=""
-                      />
-                      <div>
-                        <div className="font-semibold">{search.username}</div>
-                        <div className="text-sm text-gray-500">{search.FullName}</div>
-                      </div>
+              {getsearchuser.map((search) => (
+                <div
+                  key={search._id}
+                  className="flex items-center justify-between px-6 py-3 bg-white rounded-md my-1"
+                >
+                  <div className="flex items-center space-x-3" onClick={() => acesschat({ _id: null, username: search.username })}>
+                    <img
+                      src={search.Avatar}
+                      className="w-12 h-12 rounded-full object-cover"
+                      alt=""
+                    />
+                    <div>
+                      <div className="font-semibold">{search.username}</div>
+                      <div className="text-sm text-gray-500">{search.FullName}</div>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Main content area */}
           <div className="max-h-96 overflow-y-auto">
-              {chatsuser.map((chat, index) => (
-                <>
-                  <div key={index} className="flex items-center justify-between px-6 py-3 bg-white rounded-md my-1">
-                    <div className="flex items-center space-x-3" onClick={() => acesschat({ _id: chat._id, username: null })}>
-                     { !chat.isgroup && <img src={chat.users[0].Avatar} className="w-12 h-12 rounded-full object-cover" alt="" /> }
-                      { chat.isgroup && <img src={chat.Avatar} className="w-12 h-12 rounded-full object-cover" alt="" />}
-                     {!chat.isgroup && <div>
-                        <div className="font-semibold">{chat.users[0].username}</div>
-                        <div className="text-sm text-gray-500">{chat.latestmessage.content}</div>
-                      </div>}
-                      { chat.isgroup && 
-                          <div>
-                            <div className="font-semibold">{chat.chatname}</div>
-                            <div className="text-sm text-gray-500">GroupChat</div>
-                          </div>
-                      }
-                    </div>
+            {chatsuser.map((chat) => (
+              <>
+                <div key={chat._id} className="flex items-center justify-between px-6 py-3 bg-white rounded-md my-1">
+                  <div className="flex items-center space-x-3" onClick={() => acesschat({ _id: chat._id, username: null })}>
+                    {!chat.isgroup && <img src={chat.users[0].Avatar} className="w-12 h-12 rounded-full object-cover" alt="" />}
+                    {chat.isgroup && <img src={chat.Avatar} className="w-12 h-12 rounded-full object-cover" alt="" />}
+                    {!chat.isgroup && <div>
+                      <div className="font-semibold">{chat.users[0].username}</div>
+                      <div className="text-sm text-gray-500">{chat.latestmessage.content}</div>
+                    </div>}
+                    {chat.isgroup &&
+                      <div>
+                        <div className="font-semibold">{chat.chatname}</div>
+                        <div className="text-sm text-gray-500">GroupChat</div>
+                      </div>
+                    }
                   </div>
-                </>
-              ))}
+                </div>
+              </>
+            ))}
           </div>
 
         </div>
@@ -285,44 +285,37 @@ const ChatPage = () => {
           <div className="flex items-center justify-between p-6 border-b">
 
             <div className="flex items-center space-x-3">
-            { !chats.isgroup && <img src={chats.users[0].Avatar} className="w-36 h-36 rounded-full object-cover" alt="" /> }
-            { chats.isgroup && <img src={chats.Avatar} className="w-36 h-36 rounded-full object-cover" alt="" /> }
+              {!chats.isgroup && <img src={chats.users[0].Avatar} className="w-36 h-36 rounded-full object-cover" alt="" />}
+              {chats.isgroup && <img src={chats.Avatar} className="w-36 h-36 rounded-full object-cover" alt="" />}
               <div className="flex items-center space-x-3 mx-60">
-              {!chats.isgroup &&  <div className="font-semibold">{chats.users[0].FullName}</div>}
-              {chats.isgroup &&  <div className="font-semibold">{chats.chatname}</div>}
+                {!chats.isgroup && <div className="font-semibold">{chats.users[0].FullName}</div>}
+                {chats.isgroup && <div className="font-semibold">{chats.chatname}</div>}
               </div>
             </div>
-            {showGroupfun && <Groupfun _id={chats._id} onClose={changegroup} acesschat = {chats}/>} 
-            {chats.isgroup &&  userid == chats.groupAdmin &&  (
-                  <>
-                    <img src={write} className="w-6 h-6" alt="edit icon" onClick={changegroup}/>
-                    <img src={del} className="w-6 h-6 " alt="delete icon" onClick={()=>deletegroup({_id:chats._id})}/> 
-                  </>
-              )}
+            {showGroupfun && <Groupfun _id={chats._id} onClose={changegroup} acesschat={chats} />}
+            {chats.isgroup && userid == chats.groupAdmin && (
+              <>
+                <img src={write} className="w-6 h-6" alt="edit icon" onClick={changegroup} />
+                <img src={del} className="w-6 h-6 " alt="delete icon" onClick={() => deletegroup({ _id: chats._id })} />
+              </>
+            )}
           </div>
           <div ref={containerRef} className="flex-1 p-6 overflow-y-auto">
-                       
-             {allmessage.map((message , index)=> 
-             <div key={index} className={`flex items-center mb-4 ${userid == message.sender._id ? 'justify-end' : 'justify-start'}`} index = {index}>
-                <img src={message.sender.Avatar} alt="" className="w-8 h-8 rounded-full object-cover mr-2"/>
-                <div
-                  className={`max-w-[60%] p-3 rounded-lg flex  ${
-                    userid == message.sender._id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
-                } `}
-                >
-                  <div className="font-semibold">{message.content}</div>
-                  <div className="text-sm"></div>
-                  <div className="text-xs text-gray-500 mt-1"></div>
+
+            {allmessage.map((message) => (
+              <div key={message._id} className={`flex items-center mb-4 ${userid === message.sender._id ? 'justify-end' : 'justify-start'}`}>
+                <img src={message.sender.Avatar} alt="User Avatar" className="w-8 h-8 rounded-full object-cover mr-2" />
+                <div className={`max-w-[60%] p-3 rounded-lg flex ${userid === message.sender._id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}>
                 </div>
               </div>
-              )
-            }
+            ))}
+
           </div>
           <div className="flex items-center justify-between p-6 border-t">
             <SmileIcon className="h-6 w-6 text-gray-500" />
             <input type="text" placeholder="Type your message..." className="flex-1 mx-4" value={newchat}
-                onChange={handleInputChange} />
-            <PlaneIcon className="h-6 w-6 text-gray-500" onClick={()=>createMessage(chats._id)}/>
+              onChange={handleInputChange} />
+            <PlaneIcon className="h-6 w-6 text-gray-500" onClick={() => createMessage(chats._id)} />
           </div>
         </div>
         }
