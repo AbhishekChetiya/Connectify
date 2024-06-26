@@ -12,7 +12,7 @@ const GetAllPost = () => {
         const fetchData = async () => {
             try {
                 const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
-                const response = await axios.get(`http://localhost:3000/users/allPost?skip=${skip}&limit=${limit}`, {
+                const response = await axios.get(`https://backend-intsagram.onrender.com/users/allPost?skip=${skip}&limit=${limit}`, {
                     headers: {
                         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
                     }

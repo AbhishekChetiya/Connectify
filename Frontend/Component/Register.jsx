@@ -37,7 +37,7 @@ const RegisterPage = () => {
     // Add your registration logic here, such as sending registration data to a server
    
 
-    axios.post('http://localhost:3000/users/register', {
+    axios.post('https://backend-intsagram.onrender.com/users/register', {
       password: password,
       username: username,
       Avatar: avatar,

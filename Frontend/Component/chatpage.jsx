@@ -30,7 +30,7 @@ const ChatPage = () => {
     if(newchat!=null){
     const user = JSON.parse(userValue);
     try{
-     const get =  await axios.post('http://localhost:3000/users/newmessage',{
+     const get =  await axios.post('https://backend-intsagram.onrender.com/users/newmessage',{
         chatid:_id ,
         content:newchat,
       }, {
@@ -54,7 +54,7 @@ const ChatPage = () => {
       if (userValue) {
         setUserid(user.user);
         try {
-          const response = await axios.get('http://localhost:3000/users/allchat', {
+          const response = await axios.get('https://backend-intsagram.onrender.com/users/allchat', {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${user?.Token}`,
@@ -80,7 +80,7 @@ const ChatPage = () => {
       const user = JSON.parse(userValue);
       setUserid(user.user);
       try {
-        const response = await axios.get('http://localhost:3000/users/accesschat', {
+        const response = await axios.get('https://backend-intsagram.onrender.com/users/accesschat', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user?.Token}`,
@@ -90,7 +90,7 @@ const ChatPage = () => {
             username: username
           },
         });
-        const res = await axios.get('http://localhost:3000/users/getallmessage', {
+        const res = await axios.get('https://backend-intsagram.onrender.com/users/getallmessage', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user?.Token}`,
@@ -121,7 +121,7 @@ const ChatPage = () => {
 
   const search = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/users/FindUser', {
+      const response = await axios.get('https://backend-intsagram.onrender.com/users/FindUser', {
         params: { search: searchValue }
       });
 
@@ -169,7 +169,7 @@ const ChatPage = () => {
     const userValue = localStorage.getItem("user");
     const user = JSON.parse(userValue);
     try{
-      await axios.post('http://localhost:3000/users/deletegroup',{
+      await axios.post('https://backend-intsagram.onrender.com/users/deletegroup',{
         chatid:_id ,
       }, {
         headers: {

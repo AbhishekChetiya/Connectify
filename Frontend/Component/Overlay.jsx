@@ -13,7 +13,7 @@ function FormOverlay({ onClose }) {
 
     const search = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/users/FindUser', {
+            const response = await axios.get('https://backend-intsagram.onrender.com/users/FindUser', {
                 params: { search: searchValue }
             });
 
@@ -69,7 +69,7 @@ function FormOverlay({ onClose }) {
           }
         }
 
-         await axios.post('http://localhost:3000/users/creategroup' , {
+         await axios.post('https://backend-intsagram.onrender.com/users/creategroup' , {
             groupname: groupname ,
             users: JSON.stringify(alluserid),
             Postimg: postimg,

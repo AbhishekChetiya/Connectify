@@ -11,7 +11,7 @@ function Groupfun({ _id, onClose, acesschat }) {
   const [newGroupName, setNewGroupName] = useState("")
   const search = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/users/FindUser', {
+      const response = await axios.get('https://backend-intsagram.onrender.com/users/FindUser', {
         params: { search: searchValue }
       });
 
@@ -40,7 +40,7 @@ function Groupfun({ _id, onClose, acesschat }) {
       const userValue = localStorage.getItem("user");
       const user = JSON.parse(userValue);
       try{
-        const get = await axios.post('http://localhost:3000/users/addtogroup',{
+        const get = await axios.post('https://backend-intsagram.onrender.com/users/addtogroup',{
           chatid:_id , user:userid
         }, {
           headers: {
@@ -59,7 +59,7 @@ function Groupfun({ _id, onClose, acesschat }) {
     const userValue = localStorage.getItem("user");
     const user = JSON.parse(userValue);
     try{
-      const get = await axios.post('http://localhost:3000/users/removetogroup',{
+      const get = await axios.post('https://backend-intsagram.onrender.com/users/removetogroup',{
         chatid:_id , user:userid
       }, {
         headers: {
@@ -83,7 +83,7 @@ function Groupfun({ _id, onClose, acesschat }) {
     const userValue = localStorage.getItem("user");
     const user = JSON.parse(userValue);
     try{
-     await axios.post('http://localhost:3000/users/renamegroup',{
+     await axios.post('https://backend-intsagram.onrender.com/users/renamegroup',{
         chatid:_id , chatname: newGroupName,
       }, {
         headers: {

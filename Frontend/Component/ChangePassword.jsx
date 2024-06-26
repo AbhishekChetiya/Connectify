@@ -73,7 +73,7 @@ const ChangePasswordCard = () => {
                 const headers = {
                     Authorization: `Bearer ${getLocalStorageItem?.Token}`,
                 };
-                 await axios.post('http://localhost:3000/users/ChangePassword', { newPassword: password, oldPassword: oldpassword }, { headers });
+                 await axios.post('https://backend-intsagram.onrender.com/users/ChangePassword', { newPassword: password, oldPassword: oldpassword }, { headers });
                const user = localStorage.getItem("user");
                 if (user) {
                     localStorage.removeItem("user");

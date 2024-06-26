@@ -14,7 +14,7 @@ const ProfilePage = () => {
         if(!getLocalStorageItem){
              navigate('/login')
         }
-        const response = await axios.get('http://localhost:3000/users/Profile', {
+        const response = await axios.get('https://backend-intsagram.onrender.com/users/Profile', {
           headers: {
             Authorization: `Bearer ${getLocalStorageItem?.Token}`,
           }

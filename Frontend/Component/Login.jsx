@@ -23,7 +23,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     
-  const get =  await  axios('http://localhost:3000/users/login', {
+  const get =  await  axios('https://backend-intsagram.onrender.com/users/login', {
       method: "post",
       data: {
         username: username,
