@@ -3,7 +3,7 @@ import ApiResponse from "../Utils/ApiResponse.js";
 import { FileUpload } from "../Utils/PostUpload.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import CommentSc from "../models/Comment.model.js";
-import Like from "../models/LIke.model.js";
+import Like from "../models/Like.model.js";
 import Post from "../models/Post.model.js";
 import { User } from "../models/user.model.js";
 

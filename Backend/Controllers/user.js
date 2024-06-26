@@ -6,8 +6,6 @@ import ApiResponse from "../Utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import Following from "../models/Following.model.js";
 import Post from "../models/Post.model.js";
-import Like from "../models/LIke.model.js";
-import CommentSc from "../models/Comment.model.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { FullName, username, email, password } = req.body;
