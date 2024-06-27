@@ -10,7 +10,7 @@ import Groupfun from "./GroupFun";
 import { useNotification } from "./Notification";
 import io from 'socket.io-client'
 
-const URL = "http://localhost:3000";
+const URL = "https://backend-intsagram.onrender.com";
 var socket , selectedChatCompare;
 const ChatPage = () => {
   const containerRef = useRef(null);
