@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import photo from '/abhi_photo.jpeg'
 import { useNotification } from './Notification';
-
+import { NavLink } from 'react-router-dom';
 
 // Custom DropdownMenuTrigger component
 const DropdownMenuTrigger = ({ children }) => {
