@@ -86,150 +86,283 @@ const ButtonPage = () => {
         setSearchValue(event.target.value);
     };
     return (
-        <div>
-            <header className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 lg:px-8 lg:py-5">
-                <div className="flex items-center gap-4">
-                    <img src={photo} alt='photo' className='rounded-full object-contain h-10' />
-                    <nav className="hidden space-x-4 md:flex">
-                        {islogin ? <> <Link className="text-sm font-medium hover:underline" to="">
-                            Profile
-                        </Link>
-                            <Link className="text-sm font-medium hover:underline" to="/Allpost">
-                                AllPost
-                            </Link>
-                            <Link className="text-sm font-medium hover:underline" to="/Post">
-                                Post
-                            </Link>
-                            <Link className="text-sm font-medium hover:underline" to="/ChangePassword">
-                                ChangePassword
-                            </Link>
-                            <Link className="text-sm font-medium hover:underline" to="/UpdateAvatar">
-                                UpdateAvatar
-                            </Link>
-                            <Link className="text-sm font-medium hover:underline" to="/login">
-                                logout
-                            </Link>
-                            <Link className="relative inline-block" to="/chatpage">
-                                <MessageCircleIcon className="h-6 w-6" />
-                              {notification!=0 &&  <div className="absolute top-0 right-0 -mt-1 -mr-1 h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white flex items-center justify-center">
-                                  {notification}
-                                </div>}
-                            </Link>
-                        </> : <> <Link className="text-sm font-medium hover:underline" to="/register">
-                            Register
-                        </Link>
-                            <Link className="text-sm font-medium hover:underline" href="/login">
-                                login
-                            </Link></>}
-                    </nav>
-                </div>
+  <div>
+    <header className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 lg:px-8 lg:py-5">
+      <div className="flex items-center gap-4">
+        <img src={photo} alt="photo" className="rounded-full object-contain h-10" />
+        <nav className="hidden space-x-4 md:flex">
+          {islogin ? (
+            <>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to=""
+              >
+                Profile
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/Allpost"
+              >
+                AllPost
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/Post"
+              >
+                Post
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/ChangePassword"
+              >
+                ChangePassword
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/UpdateAvatar"
+              >
+                UpdateAvatar
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/login"
+              >
+                Logout
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "relative inline-block text-blue-500" : "relative inline-block"
+                }
+                to="/chatpage"
+              >
+                <MessageCircleIcon className="h-6 w-6" />
+                {notification != 0 && (
+                  <div className="absolute top-0 right-0 -mt-1 -mr-1 h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white flex items-center justify-center">
+                    {notification}
+                  </div>
+                )}
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/register"
+              >
+                Register
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-sm font-medium text-blue-500" : "text-sm font-medium hover:underline"
+                }
+                to="/login"
+              >
+                Login
+              </NavLink>
+            </>
+          )}
+        </nav>
+      </div>
 
-                <div className="md:hidden">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <button size="icon" variant="outline" onClick={toggleMenu}>
-                                <MenuIcon className="h-6 w-6" />
-                                <span className="sr-only">Toggle navigation menu</span>
-                            </button>
-                        </DropdownMenuTrigger>
-                        {isOpen ? (
-                            <DropdownMenuContent align="middle" className="w-48">
-                                {islogin ? <> <DropdownMenuItem>
-                                    <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="">
-                                        Profile
-                                    </Link>
-                                </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Allpost">
-                                            AllPost
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/Post">
-                                            Post
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/ChangePassword">
-                                            ChangePassword
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/UpdateAvatar">
-                                            UpdateAvatar
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login"
-                                        >
-                                            Logout
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link className="relative inline-block" onClick={toggleMenu} to="/chatpage">
-                                            <MessageCircleIcon className="h-6 w-6" />
-                                 {notification!=0 &&  <div className="absolute top-0 right-0 -mt-1 -mr-1 h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white flex items-center justify-center">
-                                  {notification}
-                                </div>}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                </>
-                                    : <>
-                                        <DropdownMenuItem>
-                                            <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/login">
-                                                Login
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <Link onClick={toggleMenu} className="block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800" to="/register"
-                                            >
-                                                Register
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </>}
-                            </DropdownMenuContent>) : ""}
-                    </DropdownMenu>
-
-                </div>
-                {islogin ? <div className="relative flex flex-shrink w-18 md:mx-2 lg:mx-3">
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2" onClick={handleSearchChange}>
-                        <SearchIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                    </div>
-                    <input
-                        className="w-full rounded-md border border-gray-300 bg-white px-10 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-                        placeholder="Search..."
-                        type="search"
-                        value={searchValue || ''}
-                        onChange={handlevalue}
-                    />
-                </div> : ""}
-
-            </header>
-
-            {getsearchuser.map((user) => (
-                <div className="mt-4 max-h-[300px] overflow-y-auto" key={user._id} onClick={() => searchclick(user._id)}>
-                    <div className="grid gap-4">
-                        <div className="flex items-center gap-4 mx-10">
-                            <img alt="UserImg" src={user.Avatar} className='rounded-full object-contain h-12' />
-                            <div className="flex-1">
-                                <h4 className="font-medium">{user.username}</h4>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{user.FullName}</p>
-                            </div>
+      <div className="md:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button size="icon" variant="outline" onClick={toggleMenu}>
+              <MenuIcon className="h-6 w-6" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </button>
+          </DropdownMenuTrigger>
+          {isOpen && (
+            <DropdownMenuContent align="middle" className="w-48">
+              {islogin ? (
+                <>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to=""
+                    >
+                      Profile
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/Allpost"
+                    >
+                      AllPost
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/Post"
+                    >
+                      Post
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/ChangePassword"
+                    >
+                      ChangePassword
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/UpdateAvatar"
+                    >
+                      UpdateAvatar
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/login"
+                    >
+                      Logout
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "relative inline-block text-blue-500" : "relative inline-block"
+                      }
+                      onClick={toggleMenu}
+                      to="/chatpage"
+                    >
+                      <MessageCircleIcon className="h-6 w-6" />
+                      {notification != 0 && (
+                        <div className="absolute top-0 right-0 -mt-1 -mr-1 h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white flex items-center justify-center">
+                          {notification}
                         </div>
-                    </div>
-                </div>))}
+                      )}
+                    </NavLink>
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/login"
+                    >
+                      Login
+                    </NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink
+                      onClick={toggleMenu}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "block px-4 py-2 text-sm font-medium bg-blue-500 text-white"
+                          : "block px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }
+                      to="/register"
+                    >
+                      Register
+                    </NavLink>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          )}
+        </DropdownMenu>
+      </div>
 
-            < Outlet />
-            <div className="flex flex-col">
-                <main className="flex-1" />
-                <footer className="bg-gray-900 py-6 text-center text-gray-400">
-                    <div className="container mx-auto px-4">
-                        <p className="text-sm">© 2024 Acme Inc. All rights reserved.</p>
-                    </div>
-                </footer>
+      {islogin ? (
+        <div className="relative flex flex-shrink w-18 md:mx-2 lg:mx-3">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2" onClick={handleSearchChange}>
+            <SearchIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+          </div>
+          <input
+            className="w-full rounded-md border border-gray-300 bg-white px-10 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Search..."
+            type="search"
+            value={searchValue || ''}
+            onChange={handlevalue}
+          />
+        </div>
+      ) : ("")}
+    </header>
+
+    {getsearchuser.map((user) => (
+      <div className="mt-4 max-h-[300px] overflow-y-auto" key={user._id} onClick={() => searchclick(user._id)}>
+        <div className="grid gap-4">
+          <div className="flex items-center gap-4 mx-10">
+            <img alt="UserImg" src={user.Avatar} className="rounded-full object-contain h-12" />
+            <div className="flex-1">
+              <h4 className="font-medium">{user.username}</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{user.FullName}</p>
             </div>
-        </div >
-    );
+          </div>
+        </div>
+      </div>
+    ))}
+
+    <Outlet />
+    <div className="flex flex-col">
+      <main className="flex-1" />
+      <footer className="bg-gray-900 py-6 text-center text-gray-400">
+        <div className="container mx-auto px-4">
+          <p className="text-sm">© 2024 Acme Inc. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  </div>
+);
+
+    
 };
 
 export default ButtonPage;
