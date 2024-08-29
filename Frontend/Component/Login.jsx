@@ -25,18 +25,23 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     
-  const get =  await  axios('https://backend-intsagram.onrender.com/users/login', {
-      method: "post",
-      data: {
-        username: username,
-        password: password
-      },
-    }).then((res)=>{toast.success("Successfully Login")}).catch((err)=>{toast.error(err)})
-    localStorage.setItem("user", JSON.stringify(get.data.data));
-        navigation("/Allpost");
-        window.location.reload();
-    setUsername('');
-    setPassword('');
+    try {
+      const get = await axios.post('https://backend-intsagram.onrender.com/users/login', {
+          username: username,
+          password: password
+      });
+      
+      toast.success("Successfully Logged In");
+      localStorage.setItem("user", JSON.stringify(get.data.data));
+      
+      navigation("/Allpost");
+      window.location.reload();
+  
+      setUsername('');
+      setPassword('');
+  } catch (err) {
+      toast.error(err.response?.data?.message || "Login failed");
+  }
   };
 
   return (
