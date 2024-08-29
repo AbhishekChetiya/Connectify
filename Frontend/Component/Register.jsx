@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -48,9 +50,9 @@ const RegisterPage = () => {
         'Content-Type': 'multipart/form-data'
       }
     }).then((res) => {
-      console.log(res)
+      toast.success("Sccefully Registered");   
     }).catch((err) => {
-      console.log(err);
+      toast.error(err);
     })
     setUsername('');
     setFullName('');
@@ -63,6 +65,7 @@ const RegisterPage = () => {
   }
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 py-12 dark:bg-gray-950">
+      <ToastContainer/>
       <div className="w-full max-w-md space-y-8 p-8 bg-yellow-50">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">

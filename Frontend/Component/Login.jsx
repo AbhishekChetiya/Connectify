@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const LoginPage = () => {
   const navigation = useNavigate();
   const [username, setUsername] = useState('');
@@ -29,7 +31,7 @@ const LoginPage = () => {
         username: username,
         password: password
       },
-    })
+    }).then((res)=>{toast.success("Successfully Login")}).catch((err)=>{toast.error(err)})
     localStorage.setItem("user", JSON.stringify(get.data.data));
         navigation("/Allpost");
         window.location.reload();
@@ -39,6 +41,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-blue-100">
+      <ToastContainer/>
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <div className="flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-4">Login</h1>
