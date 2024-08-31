@@ -125,7 +125,7 @@ const SinglePost = () => {
     catch (err) {
       toast.error("Something went wrong");
     }
-  }, 300); // Set debounce delay (e.g., 300ms)
+  }, 3000); // Set debounce delay (e.g., 300ms)
   if (!data) {
     return <div className="flex justify-center items-center h-screen">
       <p className="text-center">Not Found</p>
