@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { debounce } from 'lodash';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -108,7 +109,7 @@ const SinglePost = () => {
   const handleInput = (event) => {
     setComm({ ...comm, [event.target.name]: event.target.value });
   };
-  const hitlikebutton = async () => {
+  const hitlikebutton = debounce(async () => {
     const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
     const headers = {
       Authorization: `Bearer ${getLocalStorageItem?.Token}`,
@@ -119,12 +120,12 @@ const SinglePost = () => {
       }, { headers });
       setNooflike(response.data.data.nooflike);
       setIsilike(response.data.data.isilike);
-      toast.success("Succesfully hit like button")
+      toast.success("Successfully hit like button");
     }
     catch (err) {
-      toast.error("Some things Went Wrong")
+      toast.error("Something went wrong");
     }
-  }
+  }, 300); // Set debounce delay (e.g., 300ms)
   if (!data) {
     return <div className="flex justify-center items-center h-screen">
       <p className="text-center">Not Found</p>

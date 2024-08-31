@@ -54,29 +54,39 @@ const postDetail = asyncHandler(async (req, res) => {
 const Posthitlike = asyncHandler(async (req, res) => {
     const { post_id, _id } = req.body;
 
-    const getlike = await Like.findOne({ $and: [{ LikeBy: _id }, { PostOn: post_id }] });
+    if (!post_id || !_id) {
+        return res.status(400).json(new ApiResponse(400, null, "Post ID and User ID are required"));
+    }
+
+    // Check if the like exists
+    const getlike = await Like.findOne({ LikeBy: _id, PostOn: post_id });
+
+    // Find the post
+    const post = await Post.findById(post_id);
+    if (!post) {
+        return res.status(404).json(new ApiResponse(404, null, "Post not found"));
+    }
 
     if (!getlike) {
+        // Like the post
         await Like.create({
             LikeBy: _id,
             PostOn: post_id,
         });
-        const post = await Post.findById(post_id);
-        const getlikevalue = post.Nooflike + 1;
-        post.Nooflike = post.Nooflike + 1;
-        await post.save({ validateBeforeSave: true });
+        post.Nooflike += 1;
+        await post.save();
 
-        return res.status(200).json(new ApiResponse(200, { nooflike: getlikevalue, isilike: true }, "Like Successfully"));
-    }
-    else {
-        await Like.deleteOne({ $and: [{ LikeBy: _id }, { PostOn: post_id }] });
-        const post = await Post.findById(post_id);
-        const getlikevalue = post.Nooflike - 1;
-        post.Nooflike = post.Nooflike - 1;
-        await post.save({ validateBeforeSave: true });
-        return res.status(200).json(new ApiResponse(200, { nooflike: getlikevalue, isilike: false }, "UnLike Successfully"));
+        return res.status(200).json(new ApiResponse(200, { nooflike: post.Nooflike, isilike: true }, "Like Successfully"));
+    } else {
+        // Unlike the post
+        await Like.deleteOne({ LikeBy: _id, PostOn: post_id });
+        post.Nooflike -= 1;
+        await post.save();
+
+        return res.status(200).json(new ApiResponse(200, { nooflike: post.Nooflike, isilike: false }, "UnLike Successfully"));
     }
 });
+
 
 const AddComment = asyncHandler(async (req, res) => {
     const { Username, post_id, _id, Comment } = req.body;
