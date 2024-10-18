@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import photo from '/abhi_photo.jpeg'
@@ -76,6 +76,7 @@ const ButtonPage = () => {
     const searchclick = (id) => {
         setGetSearchUser([]);
         navigate(`/Profile/${id}`);
+
     }
     useEffect(() => {
         const userValue = localStorage.getItem("user");

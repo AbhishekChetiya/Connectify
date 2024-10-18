@@ -1,6 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState ,useContext} from 'react';
 import { useNavigate } from 'react-router-dom'
+import { LoginContext } from './Logincontext.jsx';
+
+
 const Card = ({ children, className }) => {
     return (
         <div className={`border border-gray-300 rounded-lg shadow-sm p-2 ${className}`}>
@@ -62,7 +65,7 @@ const ChangePasswordCard = () => {
     const navigation = useNavigate();
     let [password, setPassword] = useState('');
     let [oldpassword, setOldPassword] = useState('');
-
+    const { islogin, setIslogin } = useContext(LoginContext);
     const handlesummit = async (e) => {
         e.preventDefault()
         if (password === '') {
