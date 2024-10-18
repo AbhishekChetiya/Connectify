@@ -140,7 +140,6 @@ const SinglePost = () => {
 
       await axios.post('https://backend-intsagram.onrender.com/users/Post/delete', { postid: postid, username: data.Username }, { headers });
       navigation("/Allpost");
-      window.location.reload();
     } catch (error) {
       toast.error("this post not belong to you")
     }

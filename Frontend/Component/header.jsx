@@ -5,8 +5,8 @@ import { Outlet } from 'react-router-dom';
 import photo from '/abhi_photo.jpeg'
 import { useNotification } from './Notification';
 import { NavLink } from 'react-router-dom';
+import { LoginContext } from './Logincontext.jsx';
 
-// Custom DropdownMenuTrigger component
 const DropdownMenuTrigger = ({ children }) => {
     return <div className="relative">{children}</div>;
 };
@@ -34,7 +34,7 @@ const DropdownMenu = ({ children }) => {
 
 const ButtonPage = () => {
     const [searchValue, setSearchValue] = useState("");
-    const [islogin, setIslogin] = useState(false);
+    const { islogin, setIslogin } = useContext(LoginContext);
     const [getsearchuser, setGetSearchUser] = useState([]);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -76,7 +76,6 @@ const ButtonPage = () => {
     const searchclick = (id) => {
         setGetSearchUser([]);
         navigate(`/Profile/${id}`);
-
     }
     useEffect(() => {
         const userValue = localStorage.getItem("user");

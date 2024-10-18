@@ -78,7 +78,7 @@ const ChangePasswordCard = () => {
                 if (user) {
                     localStorage.removeItem("user");
                     navigation("/login");
-                    window.location.reload();
+                    setIslogin(false);
                 }
             } catch (error) {
                 // Handle errors

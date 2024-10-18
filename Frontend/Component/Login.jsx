@@ -3,15 +3,18 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoginContext } from './Logincontext.jsx';
 const LoginPage = () => {
   const navigation = useNavigate();
+  const { islogin, setIslogin } = useContext(LoginContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
+      setIslogin(false);
       localStorage.removeItem("user");
-      window.location.reload();
+      navigation("/register")
     }
   }, []);
   const handleUsernameChange = (event) => {
@@ -31,12 +34,10 @@ const LoginPage = () => {
           password: password
       });
       
+      setIslogin(true)
       toast.success("Successfully Logged In");
       localStorage.setItem("user", JSON.stringify(get.data.data));
-      
       navigation("/Allpost");
-      window.location.reload();
-  
       setUsername('');
       setPassword('');
   } catch (err) {
