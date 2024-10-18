@@ -11,7 +11,8 @@ import ProfilePage1 from '../Component/Profile1.jsx';
 import GetAllPost from '../Component/GetallPost.jsx';
 import ChangePasswordCard from '../Component/ChangePassword.jsx';
 import UpdateAvatar from '../Component/ChangeAvatar.jsx';
-import ChatPage from '../Component/chatpage.jsx';;
+import ChatPage from '../Component/chatpage.jsx';
+import { LoginProvider } from '../Component/Logincontext.jsx';
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -65,9 +66,11 @@ const App = () => {
     },
   ]);
   return (
+    <LoginProvider>
     <div>
       <RouterProvider router={router} />
     </div>
+    </LoginProvider>
   );
 }
 
