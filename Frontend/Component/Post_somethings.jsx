@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ChatBubble from './Chatbot.jsx';
 
 const PostPage = () => {
     const [title, setTitle] = useState('');
@@ -115,6 +116,7 @@ const PostPage = () => {
                 </form>
                 <ToastContainer />
             </div>
+            <ChatBubble/>
         </div>
     )
 
