@@ -45,7 +45,7 @@ const ButtonPage = () => {
     const { notification } = useNotification();
     const search = async () => {
         try {
-            const response = await axios.get('https://backend-intsagram.onrender.com/users/FindUser', {
+            const response = await axios.get(`${import.meta.env.VITE_backend_URL}/users/FindUser`, {
                 params: { search: searchValue }
             });
 

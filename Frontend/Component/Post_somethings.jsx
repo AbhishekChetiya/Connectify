@@ -22,7 +22,7 @@ const PostPage = () => {
         event.preventDefault();
         const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
         try {
-            await axios.post('https://backend-intsagram.onrender.com/users/Post/Upload', {
+            await axios.post(`${import.meta.env.VITE_backend_URL}/users/Post/Upload`, {
                 description: description,
                 title: title,
                 Postimg: postimg,

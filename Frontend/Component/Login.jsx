@@ -27,9 +27,8 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
     try {
-      const get = await axios.post('https://backend-intsagram.onrender.com/users/login', {
+      const get = await axios.post(`${import.meta.env.VITE_backend_URL}/users/login`, {
           username: username,
           password: password
       });
@@ -41,6 +40,8 @@ const LoginPage = () => {
       setUsername('');
       setPassword('');
   } catch (err) {
+      toast.error(err)
+      console.log(err);
       toast.error(err.response?.data?.message || "Login failed");
   }
   };

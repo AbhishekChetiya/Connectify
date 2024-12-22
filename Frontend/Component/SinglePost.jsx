@@ -25,7 +25,7 @@ const SinglePost = () => {
     const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://backend-intsagram.onrender.com/users/Post/detail`, {
+        const response = await axios.get(`${import.meta.env.VITE_backend_URL}/users/Post/detail`, {
           params: {
             post_id: postid
           },
@@ -71,7 +71,7 @@ const SinglePost = () => {
       const headers = {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
-      const response = await axios.post('https://backend-intsagram.onrender.com/users/Post/addcomment', comm, { headers });
+      const response = await axios.post(`${import.meta.env.VITE_backend_URL}/users/Post/addcomment`, comm, { headers });
 
       setNoofcomment(response.data.data.Nocomm)
       if (response.data.data.comments) {
@@ -92,7 +92,7 @@ const SinglePost = () => {
       const headers = {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
-      const response = await axios.post("https://backend-intsagram.onrender.com/users/Post/delcomment", { comm_id: comm_id, postid: postid }, { headers })
+      const response = await axios.post(`${import.meta.env.VITE_backend_URL}/users/Post/delcomment`, { comm_id: comm_id, postid: postid }, { headers })
 
       setNoofcomment(response.data.data.Nocomm)
       if (response.data.data.comments) {
@@ -116,7 +116,7 @@ const SinglePost = () => {
       Authorization: `Bearer ${getLocalStorageItem?.Token}`,
     };
     try {
-      const response = await axios.post("https://backend-intsagram.onrender.com/users/Post/hitlike", {
+      const response = await axios.post(`${import.meta.env.VITE_backend_URL}/users/Post/hitlike`, {
         post_id: postid
       }, { headers });
       setNooflike(response.data.data.nooflike);
@@ -139,7 +139,7 @@ const SinglePost = () => {
         Authorization: `Bearer ${getLocalStorageItem?.Token}`,
       };
 
-      await axios.post('https://backend-intsagram.onrender.com/users/Post/delete', { postid: postid, username: data.Username }, { headers });
+      await axios.post(`${import.meta.env.VITE_backend_URL}/users/Post/delete`, { postid: postid, username: data.Username }, { headers });
       navigation("/Allpost");
     } catch (error) {
       toast.error("this post not belong to you")

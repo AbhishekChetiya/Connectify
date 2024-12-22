@@ -12,7 +12,7 @@ const UpdateAvatar = () => {
 
     const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
     try {
-    await axios.post('https://backend-intsagram.onrender.com/users/UpdateAvatar', { Avatar:postimg , hello :'kj'}, {
+    await axios.post(`${import.meta.env.VITE_backend_URL}/users/UpdateAvatar`, { Avatar:postimg , hello :'kj'}, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${getLocalStorageItem?.Token}`,

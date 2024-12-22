@@ -18,7 +18,7 @@ const ProfilePage1 = () => {
         const fetchData = async () => {
             try {
                 const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
-                const response = await axios.get("https://backend-intsagram.onrender.com/users/Profile/alt",
+                const response = await axios.get(`${import.meta.env.VITE_backend_URL}/users/Profile/alt`,
                     {
                         params: {
                             _id: _id,
@@ -46,7 +46,7 @@ const ProfilePage1 = () => {
     const handelfollow = async () => {
         const getLocalStorageItem = JSON.parse(localStorage.getItem("user"));
         try {
-            const response = await axios.post("https://backend-intsagram.onrender.com/users/Follow/request", {
+            const response = await axios.post(`${import.meta.env.VITE_backend_URL}/users/Follow/request`, {
                 user_id: _id,
             },
                 {
