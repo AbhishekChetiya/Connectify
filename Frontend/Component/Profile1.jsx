@@ -38,7 +38,7 @@ const ProfilePage1 = () => {
         };
 
         fetchData();
-    }, []); // Empty dependency array ensures useEffect runs only once after the initial render
+    }, [_id]); // Empty dependency array ensures useEffect runs only once after the initial render
     if (!data) {
         return <div>Loading...</div>; // Add a loading indicator while fetching data
     }

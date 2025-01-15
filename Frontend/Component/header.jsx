@@ -74,6 +74,7 @@ const ButtonPage = () => {
     // Make sure to declare setSearchValue outside the function to avoid re-initializing it on each call
     const navigate = useNavigate();
     const searchclick = (id) => {
+      console.log(id);
         setGetSearchUser([]);
         navigate(`/Profile/${id}`);
 
