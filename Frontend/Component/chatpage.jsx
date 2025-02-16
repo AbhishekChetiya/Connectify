@@ -69,7 +69,7 @@ const ChatPage = () => {
     };
     notificationDec();
     fetchChatData();
-    socket = io(URL);
+    socket = io(import.meta.env.VITE_backend_URL);
     socket.emit("setup",user.user);
     socket.on("connection",() => setsocketconneted(true));
   }, []);
@@ -114,7 +114,7 @@ const ChatPage = () => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-    selectedChatCompare = selectedchat
+
   },[allmessage]);
 
   
@@ -133,7 +133,7 @@ const ChatPage = () => {
         toast.error("No user Found");
       }
     } catch (error) {
-      console.error('Error searching for users:', error);
+      toast.error("An error occurred");
     }
   }
   function searchFunction() {
